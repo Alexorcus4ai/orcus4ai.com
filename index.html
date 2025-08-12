@@ -3,85 +3,368 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Coming Soon - Orcus4AI</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<title>Orcus4Ai</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --card: #fffbe6;
-    --accent: #d65a12;
-    --text: #5f4b32;
-    --muted: #9c8b77;
-    --maxw: 1100px;
+  :root{
+    --card:#fffbe6;
+    --accent:#d65a12;
+    --text:#947654;
+    --muted:#a88f77;
+    --creator:#4c4c4c;
+    --maxw:1280px;
+    --max-content:420px;
   }
 
-  body {
-    margin: 0;
-    background: var(--card);
-    font-family: Inter, system-ui, Segoe UI, Roboto, "Helvetica Neue", Arial;
-    color: var(--text);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    text-align: center;
-    flex-direction: column;
-    padding: 20px;
+  /* Base */
+  html,body{height:100%; margin:0; background:var(--card); font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial; color:var(--text);}
+  .stage{min-height:100vh; display:flex; align-items:flex-start; justify-content:center; box-sizing:border-box;}
+  .phone{width:100%; max-width:var(--maxw); min-height:100vh; background:var(--card); padding:22px; box-sizing:border-box; position:relative; overflow:visible;}
+  .phone-inner{max-width:var(--max-content); margin:0 auto; position:relative;} /* relative => absolute overlay positions here */
+
+  /* Top bar */
+  .topbar{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:18px;}
+  .brand-frame{display:flex; align-items:center; justify-content:space-between; width:100%; border-radius:10px; border:3px solid var(--accent); padding:12px; box-sizing:border-box; background:transparent; z-index:3; position:relative;}
+  .brand{ color:var(--muted); font-weight:600; font-size:clamp(16px,2.6vw,18px); letter-spacing:0.2px; }
+
+  .square-btn{width:42px; height:34px; border-radius:8px; border:2px solid var(--accent); display:flex; align-items:center; justify-content:center; background:transparent; cursor:pointer; box-sizing:border-box;}
+  .hamb{ width:20px; height:14px; display:flex; flex-direction:column; justify-content:space-between; }
+  .hamb span{ display:block; height:2.5px; background:var(--accent); border-radius:2px; }
+  .close-x{ font-size:18px; color:var(--accent); line-height:1; font-weight:700; }
+
+  .creator-link{ text-align:center; margin:18px 0 36px; font-size:15px; color:var(--text); }
+  .creator-link a{ color:var(--text); text-decoration:underline; font-weight:600; }
+
+  .hero{ padding: 6px 10px 28px; }
+  .hero h1{ margin:0 0 14px; font-size:clamp(20px,4vw,28px); color:var(--text); font-weight:700; text-align:left; }
+  .hero p.lead{ margin:0 0 18px; color:var(--muted); line-height:1.45; text-align:left; font-size:clamp(13px,2.2vw,15px); }
+
+  .join-wrap{ display:inline-block; border-radius:8px; padding:8px; background:linear-gradient(#f6dbc2,#fde9d4);}
+  .join-btn{ background:var(--accent); color:#fff; border:none; padding:10px 18px; border-radius:6px; font-weight:700; cursor:pointer; font-size:15px; letter-spacing:0.3px; }
+
+  /* MENU overlay */
+  .menu-overlay{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%) translateY(-6px);
+    z-index:6;
+    width:calc(100% - 40px);
+    max-width:var(--max-content);
+    pointer-events:none; /* off until visible */
+    visibility:hidden;
+    opacity:0;
+    transition: opacity .26s ease, transform .28s cubic-bezier(.2,.9,.2,1), visibility .26s;
   }
 
-  h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(28px, 5vw, 50px);
-    font-weight: 700;
-    margin-bottom: 10px;
+  .menu-card{
+    border:3px solid var(--accent);
+    border-radius:10px;
+    padding:18px;
+    background:var(--card);
+    box-sizing:border-box;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+  }
+  .menu-card a{ display:block; text-decoration:none; color:var(--text); font-weight:700; font-size:16px; padding:10px 0; }
+  .creator-pill{ display:inline-block; margin-top:12px; background:var(--creator); color:#fff; padding:10px 14px; border-radius:6px; font-weight:700; font-size:13px; }
+
+  .menu-card .youtube-btn{ display:block; width:100%; margin:14px 0 0; padding:12px; border-radius:8px; border:none; background:var(--accent); color:#fff; font-weight:700; font-size:13px; letter-spacing:0.6px; cursor:pointer; }
+
+  /* Active state */
+  .menu-overlay.active{
+    pointer-events:auto;
+    visibility:visible;
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
   }
 
-  .title-accent {
-    width: 80px;
-    height: 4px;
-    background: var(--accent);
-    margin: 12px auto 30px;
-    border-radius: 2px;
+  /* backdrop (full-screen, sits under the menu to catch clicks) */
+  .backdrop{
+    position:fixed;
+    inset:0; /* top:0;right:0;bottom:0;left:0 */
+    z-index:5;
+    background: rgba(0,0,0,0.00); /* transparent by default */
+    pointer-events:none;
+    transition: background .26s;
+  }
+  .backdrop.active{ background: rgba(0,0,0,0.03); pointer-events:auto; }
+
+  .spacer{ height:28px; }
+
+  /* layout tweaks on larger screens */
+  @media (min-width:560px){
+    :root { --max-content: 540px; }
+    .phone{ padding:28px; }
   }
 
-  p {
-    font-size: 18px;
-    color: var(--muted);
-    max-width: 500px;
-    line-height: 1.6;
+  @media (min-width:768px){
+    :root { --max-content: 720px; }
+    .hero h1 { font-size: clamp(28px, 5vw, 36px); }
+    .hero p.lead { font-size: clamp(15px, 2.5vw, 18px); }
+    .article-image-wrapper { max-width: 500px; }
   }
 
-  .countdown {
-    font-size: 22px;
-    font-weight: bold;
-    color: var(--accent);
-    margin-top: 20px;
+  @media (min-width:1024px){
+    :root { --max-content: 960px; }
+    .hero { padding: 12px 20px 40px; }
+    .creator-link { font-size: 18px; margin: 24px 0 48px; }
   }
 
-  .btn-home {
-    margin-top: 30px;
-    display: inline-block;
-    background: var(--accent);
-    color: white;
-    padding: 12px 24px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: background 0.3s ease;
+  @media (min-width:1280px){
+    :root { --max-content: 1140px; }
   }
 
-  .btn-home:hover {
-    background: #b94a0f;
-  }
+.article-card {
+  border: 3px solid var(--accent);
+  border-radius: 10px;
+  padding: 12px;
+  background: var(--card);
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.article-image-wrapper {
+  background: #d4e4d0;
+  border-radius: 8px;
+  padding: 10px;
+  width: 100%;
+  max-width: 300px;
+  position: relative;
+
+}
+
+.article-image-wrapper img {
+  width: 100%;
+  height: auto;
+}
+
+
+.article-image-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.article-card {
+  border: 3px solid var(--accent);
+  border-radius: 10px;
+  padding: 12px;
+  background: var(--card);
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* align items to the left */
+  text-align: left; /* make text left aligned */
+}
+
+.article-meta {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 7px;
+}
+
+.article-title {
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 7px;
+
+}
+
+.article-description {
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 7px;
+
+}
+
+.article-link {
+  display: block;
+  width: 100%; /* take full width so text-align works */
+  text-align: right; /* push link text to the right */
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 8px;
+  text-decoration: none;
+}
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  background: rgba(0,0,0,0); /* transparent by default */
+  pointer-events: none;
+  transition: background 0.26s, backdrop-filter 0.26s;
+  backdrop-filter: blur(0px); /* no blur initially */
+}
+
+.backdrop.active {
+  background: rgba(0,0,0,0.15); /* light dark overlay */
+  backdrop-filter: blur(.2px); /* blur applied */
+  pointer-events: auto;
+}
+
 </style>
 </head>
 <body>
+  <div class="stage">
+    <div class="phone" id="phone">
+      <div class="phone-inner" id="phoneInner">
+        <!-- Top bar -->
+        <div class="topbar">
+          <div class="brand-frame" id="brandFrame" role="region" aria-label="top bar">
+            <div class="brand">orcus4ai</div>
+            <button class="square-btn" id="toggleBtn" aria-expanded="false" aria-controls="menuOverlay" aria-label="Menu">
+              <div class="hamb" id="hamb">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="close-x" id="closeX" style="display:none;">✕</div>
+            </button>
+          </div>
+        </div>
 
-  <h1> Coming Soon </h1>
-  <div class="title-accent"></div>
-  <p>We’re working hard to bring you something amazing.  
-  Stay tuned for the big reveal - it’s worth the wait!</p>
+        <!-- overlay menu (absolute inside phone-inner) -->
+        <div id="menuOverlay" class="menu-overlay" aria-hidden="true">
+          <div class="menu-card" role="menu" aria-label="Main menu">
+            <a href="#" role="menuitem" onclick="sendMessage()">AI COURSES</a>
+            <a href="#" role="menuitem" onclick="sendMessage()">SAFETY RESEARCH</a>
+            <a href="#" role="menuitem" onclick="sendMessage()">ARTICLES</a>
+            <a href="#" role="menuitem" onclick="sendMessage()">ABOUT US</a>
+            <div style="margin-top:12px;">
+              <span class="creator-pill" onclick="sendMessage()">BECOME A CREATOR</span>
+            </div>
+            <button class="youtube-btn" aria-label="Watch latest youtube video" onclick="sendMessage()">WATCH OUR LATEST YOUTUBE VIDEO</button>
+          </div>
+        </div>
+
+        <!-- backdrop to close menu on outside click -->
+        <div id="backdrop" class="backdrop" aria-hidden="true"></div>
+
+        <div class="spacer"></div>
+
+        <div class="creator-link">Be a <a href="#">creator</a> on Orcus4Ai.</div>
+
+        <div class="hero">
+          <h1>Your AI Journey Starts Here</h1>
+          <p class="lead">Your one-stop hub for AI courses, cutting edge safety research, and a global community for knowledge sharing</p>
+
+          <div class="join-wrap" aria-hidden="false">
+            <button class="join-btn" onclick="sendMessage()">Join the revolution.</button>
+          </div>
+        </div>
+
+<!-- New card content 
+<div class="article-card">
+  <div class="article-image-wrapper">
+    <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic1.pocketlintimages.com%2Fwordpress%2Fwp-content%2Fuploads%2F2024%2F10%2Fchatgpt-search-feature.jpg&f=1&nofb=1&ipt=4e28c7b003adaf7cd3e480829a4e78efa4d70d0bbdf2403083f89975455989b7" alt="image">
+  </div>
+  <div class="article-meta">11/07/2025. Monday. Article</div>
+  <div class="article-title">GPT-5</div>
+  <div class="article-description">The magic of openai new AI model</div>
+  <a href="#" class="article-link">Read &#8594;</a>
+</div>
+-->
+
+      </div>
+    </div>
+  </div>
 
 
+<script>
+  // Elements
+  const toggleBtn = document.getElementById('toggleBtn');
+  const hamb = document.getElementById('hamb');
+  const closeX = document.getElementById('closeX');
+  const menuOverlay = document.getElementById('menuOverlay');
+  const backdrop = document.getElementById('backdrop');
+  const brandFrame = document.getElementById('brandFrame');
+  const phoneInner = document.getElementById('phoneInner');
 
+  let menuOpen = false;
+
+  // Position the overlay directly under the brandFrame (relative to phoneInner)
+  function positionOverlay() {
+    // offsetTop is relative to offsetParent (phoneInner) so it works here
+    const top = brandFrame.offsetTop + brandFrame.offsetHeight + 8; // 8px gap
+    menuOverlay.style.top = top + 'px';
+    // ensure overlay centered by CSS left:50% + transform translateX(-50%)
+  }
+
+  // Show menu
+  function openMenu() {
+    menuOpen = true;
+    menuOverlay.classList.add('active');
+    backdrop.classList.add('active');
+    toggleBtn.setAttribute('aria-expanded', 'true');
+    menuOverlay.setAttribute('aria-hidden', 'false');
+    backdrop.setAttribute('aria-hidden', 'false');
+    hamb.style.display = 'none';
+    closeX.style.display = 'block';
+    // prevent body from scrolling behind overlay on small devices (optional)
+    document.body.style.overflow = 'hidden';
+  }
+
+  // Hide menu
+  function closeMenu() {
+    menuOpen = false;
+    menuOverlay.classList.remove('active');
+    backdrop.classList.remove('active');
+    toggleBtn.setAttribute('aria-expanded', 'false');
+    menuOverlay.setAttribute('aria-hidden', 'true');
+    backdrop.setAttribute('aria-hidden', 'true');
+    hamb.style.display = 'flex';
+    closeX.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  // Toggle handler
+  toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    positionOverlay();
+    menuOpen ? closeMenu() : openMenu();
+  });
+
+  // Clicking backdrop closes menu
+  backdrop.addEventListener('click', (e) => {
+    closeMenu();
+  });
+
+  // Close when pressing Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuOpen) closeMenu();
+  });
+
+  // Close when clicking anywhere outside phoneInner (optional)
+  document.addEventListener('click', (e) => {
+    if (!menuOpen) return;
+    const inside = phoneInner.contains(e.target);
+    const isToggle = toggleBtn.contains(e.target);
+    if (!inside && !isToggle) closeMenu();
+  });
+
+  // Reposition overlay on resize or orientation change
+  window.addEventListener('resize', () => {
+    if (menuOpen) positionOverlay();
+  });
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => { if (menuOpen) positionOverlay(); }, 120);
+  });
+
+  // Initial position
+  window.addEventListener('load', () => {
+    positionOverlay();
+  });
+
+  // message to the user
+function sendMessage() {
+  alert("Coming Soon.");
+  
+}
+</script>
 </body>
 </html>
