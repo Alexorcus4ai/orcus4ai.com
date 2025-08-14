@@ -246,11 +246,9 @@
         <div id="backdrop" class="backdrop" aria-hidden="true"></div>
 
         <div class="spacer"></div>
-
 <div class="creator-link">
-  Share <a href="https://orcus4ai.com/" target="_blank" rel="noopener noreferrer">Orcus4Ai</a> with your friend.
+  <p>Share <a href="https://orcus4ai.com" onclick="shareSite(event)">Orcus4Ai</a> with your friend</p>
 </div>
-
 
         <div class="hero">
           <h1>Your AI Journey Starts Here</h1>
@@ -260,7 +258,7 @@
 <div style="width: 340; height: 65px; overflow: hidden; border-radius: 8px;">
   <iframe src="https://orcus4ai.substack.com/embed" 
           width="340" height="200" 
-          style="border:none; transform: translateY(-60px); background-color: #f6dbc2; border-radius: 8px;"
+          style="border:none; transform: translateY(-60px); background-color: #f6dbc2;border-radius: 8px;"
           scrolling="no"></iframe>
 </div>
           </div>
@@ -368,6 +366,22 @@
     positionOverlay();
   });
 
+// share orcus4ai
+function shareSite(event) {
+  event.preventDefault();
+  
+  if (navigator.share) {
+    navigator.share({
+      title: 'Orcus4Ai',
+      text: 'Check out Orcus4Ai — an awesome site!',
+      url: 'https://orcus4ai.com'
+    })
+    .catch(err => console.log('Share canceled', err));
+  } else {
+    // Fallback for browsers without Web Share API
+    alert('Sharing not supported on this browser. Copy the link: https://orcus4ai.com');
+  }
+}
 </script>
 </body>
 </html>
