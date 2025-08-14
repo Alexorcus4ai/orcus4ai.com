@@ -209,17 +209,6 @@
   pointer-events: auto;
 }
 
-/* Make it adapt well on small screens */
-  @media (max-width: 480px) {
-    form {
-      flex-direction: column;
-      align-items: stretch;
-    }
-    form button {
-      width: 100%;
-    }
-  }
-
 </style>
 </head>
 <body>
@@ -265,40 +254,12 @@
           <p class="lead">Your one-stop hub for AI courses, cutting edge safety research, and a global community for knowledge sharing</p>
 
           <div class="join-wrap" aria-hidden="false">
-<!-- Responsive Substack Subscribe Bar -->
-<form action="https://orcus4ai.substack.com/subscribe" method="post" target="_blank" style="
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-  background: white;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  max-width: 500px;
-  margin: auto;
-">
-  <input type="email" name="email" placeholder="Your email address" required style="
-    flex: 1 1 200px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-  ">
-  <button type="submit" style="
-    background: #ff6719;
-    color: white;
-    padding: 10px 18px;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    white-space: nowrap;
-  ">
-    Subscribe
-  </button>
-</form>
+<div style="width: 350; height: 70px; overflow: hidden;">
+  <iframe src="https://orcus4ai.substack.com/embed" 
+          width="350" height="200" 
+          style="border:none; transform: translateY(-60px);"
+          scrolling="no"></iframe>
+</div>
           </div>
         </div>
 
