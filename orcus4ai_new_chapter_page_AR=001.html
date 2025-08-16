@@ -101,7 +101,7 @@
     border-radius: 2px;
   }
 
-  /* Back link */
+  /* Back link (unused, left as-is) */
   .back-link{
     display: inline-block;
     margin-top: 50px;
@@ -135,21 +135,37 @@
       <p>AI is changing so rapidly that many companies no longer focus on safety. Instead of ensuring AI is genuinely useful to humanity, it risks becoming a massive disaster and possibly even the end of humanity.
           We want to bring people together to research potential risks and develop safety measures.</p>
       <h2>Skills and Tips:</h2>   
-      <p>How to use AI in any profession or as a student. We aim to gather a group of talented AI experts and share their knowledge with you.
-          Subscribe to Orcus4AI for the latest updates.</p> 
+      <p>How to use AI in any profession or as a student. We aim to gather a group of talented AI experts and share their knowledge with you.</p>
+        <p>Subscribe to Orcus4AI for the latest updates.</p> 
       <h2>Want to join the community?</h2> 
       <p>Fill out this Google Form: <a style="font-weight: 600; color: #d65a12; font-family: Georgia, 'Times New Roman', Times, serif;" href="https://docs.google.com/forms/d/e/1FAIpQLSfkK3DKSwPvsQLvSb31a5X1Fqn1VPrzXTDu_40JU-F0t7cY4g/viewform?usp=header">Google Form </a>    
          We will contact you within 2 days.</p>
     </div>
 
-
   </div>
-  <script>
-  // Force back navigation to go to home
-  window.addEventListener("popstate", function () {
-    window.location.href = "index.html"; // change to "/" if home is at root
-  });
-</script>
 
+  <!-- Force browser "Back" to go to home -->
+  <script>
+    (function () {
+      // Set your home path here (e.g., "/" for site root, or "index.html" for a file)
+      var HOME = "index.html";
+
+      // Create an extra history entry so BACK triggers popstate on this same document
+      try { history.pushState({ trapBack: true }, "", window.location.href); } catch (e) {}
+
+      // When user hits Back (pops this state), send them to HOME
+      window.addEventListener("popstate", function () {
+        // Use replace so it doesn't add another entry
+        window.location.replace(HOME);
+      });
+
+      // Handle bfcache restores (iOS/Safari)
+      window.addEventListener("pageshow", function (e) {
+        if (e.persisted) {
+          try { history.pushState({ trapBack: true }, "", window.location.href); } catch (err) {}
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
