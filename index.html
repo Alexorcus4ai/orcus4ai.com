@@ -279,3 +279,109 @@
       </div>
     </div>
   </div>
+
+
+<script>
+  // Elements
+  const toggleBtn = document.getElementById('toggleBtn');
+  const hamb = document.getElementById('hamb');
+  const closeX = document.getElementById('closeX');
+  const menuOverlay = document.getElementById('menuOverlay');
+  const backdrop = document.getElementById('backdrop');
+  const brandFrame = document.getElementById('brandFrame');
+  const phoneInner = document.getElementById('phoneInner');
+
+  let menuOpen = false;
+
+  // Position the overlay directly under the brandFrame (relative to phoneInner)
+  function positionOverlay() {
+    // offsetTop is relative to offsetParent (phoneInner) so it works here
+    const top = brandFrame.offsetTop + brandFrame.offsetHeight + 8; // 8px gap
+    menuOverlay.style.top = top + 'px';
+    // ensure overlay centered by CSS left:50% + transform translateX(-50%)
+  }
+
+  // Show menu
+  function openMenu() {
+    menuOpen = true;
+    menuOverlay.classList.add('active');
+    backdrop.classList.add('active');
+    toggleBtn.setAttribute('aria-expanded', 'true');
+    menuOverlay.setAttribute('aria-hidden', 'false');
+    backdrop.setAttribute('aria-hidden', 'false');
+    hamb.style.display = 'none';
+    closeX.style.display = 'block';
+    // prevent body from scrolling behind overlay on small devices (optional)
+    document.body.style.overflow = 'hidden';
+  }
+
+  // Hide menu
+  function closeMenu() {
+    menuOpen = false;
+    menuOverlay.classList.remove('active');
+    backdrop.classList.remove('active');
+    toggleBtn.setAttribute('aria-expanded', 'false');
+    menuOverlay.setAttribute('aria-hidden', 'true');
+    backdrop.setAttribute('aria-hidden', 'true');
+    hamb.style.display = 'flex';
+    closeX.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  // Toggle handler
+  toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    positionOverlay();
+    menuOpen ? closeMenu() : openMenu();
+  });
+
+  // Clicking backdrop closes menu
+  backdrop.addEventListener('click', (e) => {
+    closeMenu();
+  });
+
+  // Close when pressing Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuOpen) closeMenu();
+  });
+
+  // Close when clicking anywhere outside phoneInner (optional)
+  document.addEventListener('click', (e) => {
+    if (!menuOpen) return;
+    const inside = phoneInner.contains(e.target);
+    const isToggle = toggleBtn.contains(e.target);
+    if (!inside && !isToggle) closeMenu();
+  });
+
+  // Reposition overlay on resize or orientation change
+  window.addEventListener('resize', () => {
+    if (menuOpen) positionOverlay();
+  });
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => { if (menuOpen) positionOverlay(); }, 120);
+  });
+
+  // Initial position
+  window.addEventListener('load', () => {
+    positionOverlay();
+  });
+
+// share orcus4ai
+function shareSite(event) {
+  event.preventDefault();
+  
+  if (navigator.share) {
+    navigator.share({
+      title: 'Orcus4Ai',
+      text: 'Check out Orcus4Ai — an awesome site!',
+      url: 'https://orcus4ai.com'
+    })
+    .catch(err => console.log('Share canceled', err));
+  } else {
+    // Fallback for browsers without Web Share API
+    alert('Sharing not supported on this browser. Copy the link: https://orcus4ai.com');
+  }
+}
+</script>
+</body>
+</html>
