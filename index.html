@@ -373,13 +373,13 @@ function shareSite(event) {
   if (navigator.share) {
     navigator.share({
       title: 'Orcus4Ai',
-      text: 'Check out Orcus4Ai — an awesome site!',
+      text: 'Your one-stop hub for AI courses, cutting edge safety research, and a global community for knowledge sharing:',
       url: 'https://orcus4ai.com'
     })
     .catch(err => console.log('Share canceled', err));
   } else {
     // Fallback for browsers without Web Share API
-    alert('Your one-stop hub for AI courses, cutting edge safety research, and a global community for knowledge sharing:');
+    alert('Sharing not supported on this browser. Copy the link: https://orcus4ai.com');
   }
 }
 </script>
