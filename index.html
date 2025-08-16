@@ -252,136 +252,30 @@
 
         <div class="hero">
           <h1>Your AI Journey Starts Here</h1>
-          <p class="lead">Your one-stop hub for AI courses, safety research, and a global community for knowledge sharing</p>
+          <p class="lead">Your one-stop hub for AI courses, cutting edge safety research, and a global community for knowledge sharing</p>
 
           <div class="join-wrap" aria-hidden="false">
-<div style="width: 335; height: 65px; overflow: hidden; border-radius: 8px;">
+<div style="width: 340; height: 65px; overflow: hidden; border-radius: 8px;">
   <iframe src="https://orcus4ai.substack.com/embed" 
-          width="335" height="200" 
+          width="340" height="200" 
           style="border:none; transform: translateY(-60px); background-color: #f6dbc2;border-radius: 8px;"
           scrolling="no"></iframe>
 </div>
           </div>
         </div>
 
-<!-- New card content 
+<!-- New chapter -->
 <div class="article-card">
   <div class="article-image-wrapper">
-    <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic1.pocketlintimages.com%2Fwordpress%2Fwp-content%2Fuploads%2F2024%2F10%2Fchatgpt-search-feature.jpg&f=1&nofb=1&ipt=4e28c7b003adaf7cd3e480829a4e78efa4d70d0bbdf2403083f89975455989b7" alt="image">
+    <img src="orcus4ai_new_chapter_page_image.png" alt="image">
   </div>
-  <div class="article-meta">11/07/2025. Monday. Article</div>
-  <div class="article-title">GPT-5</div>
-  <div class="article-description">The magic of openai new AI model</div>
-  <a href="#" class="article-link">Read &#8594;</a>
+  <div class="article-meta">16/08/2025. Monday. Article</div>
+  <div class="article-title">Orcus4AI 2.0</div>
+  <div class="article-description">Here we go again with new ideologies.</div>
+  <a href="orcus4ai_new_chapter_page_AR=001.html" class="article-link">Read &#8594;</a>
 </div>
--->
+
 
       </div>
     </div>
   </div>
-
-
-<script>
-  // Elements
-  const toggleBtn = document.getElementById('toggleBtn');
-  const hamb = document.getElementById('hamb');
-  const closeX = document.getElementById('closeX');
-  const menuOverlay = document.getElementById('menuOverlay');
-  const backdrop = document.getElementById('backdrop');
-  const brandFrame = document.getElementById('brandFrame');
-  const phoneInner = document.getElementById('phoneInner');
-
-  let menuOpen = false;
-
-  // Position the overlay directly under the brandFrame (relative to phoneInner)
-  function positionOverlay() {
-    // offsetTop is relative to offsetParent (phoneInner) so it works here
-    const top = brandFrame.offsetTop + brandFrame.offsetHeight + 8; // 8px gap
-    menuOverlay.style.top = top + 'px';
-    // ensure overlay centered by CSS left:50% + transform translateX(-50%)
-  }
-
-  // Show menu
-  function openMenu() {
-    menuOpen = true;
-    menuOverlay.classList.add('active');
-    backdrop.classList.add('active');
-    toggleBtn.setAttribute('aria-expanded', 'true');
-    menuOverlay.setAttribute('aria-hidden', 'false');
-    backdrop.setAttribute('aria-hidden', 'false');
-    hamb.style.display = 'none';
-    closeX.style.display = 'block';
-    // prevent body from scrolling behind overlay on small devices (optional)
-    document.body.style.overflow = 'hidden';
-  }
-
-  // Hide menu
-  function closeMenu() {
-    menuOpen = false;
-    menuOverlay.classList.remove('active');
-    backdrop.classList.remove('active');
-    toggleBtn.setAttribute('aria-expanded', 'false');
-    menuOverlay.setAttribute('aria-hidden', 'true');
-    backdrop.setAttribute('aria-hidden', 'true');
-    hamb.style.display = 'flex';
-    closeX.style.display = 'none';
-    document.body.style.overflow = '';
-  }
-
-  // Toggle handler
-  toggleBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    positionOverlay();
-    menuOpen ? closeMenu() : openMenu();
-  });
-
-  // Clicking backdrop closes menu
-  backdrop.addEventListener('click', (e) => {
-    closeMenu();
-  });
-
-  // Close when pressing Escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && menuOpen) closeMenu();
-  });
-
-  // Close when clicking anywhere outside phoneInner (optional)
-  document.addEventListener('click', (e) => {
-    if (!menuOpen) return;
-    const inside = phoneInner.contains(e.target);
-    const isToggle = toggleBtn.contains(e.target);
-    if (!inside && !isToggle) closeMenu();
-  });
-
-  // Reposition overlay on resize or orientation change
-  window.addEventListener('resize', () => {
-    if (menuOpen) positionOverlay();
-  });
-  window.addEventListener('orientationchange', () => {
-    setTimeout(() => { if (menuOpen) positionOverlay(); }, 120);
-  });
-
-  // Initial position
-  window.addEventListener('load', () => {
-    positionOverlay();
-  });
-
-// share orcus4ai
-function shareSite(event) {
-  event.preventDefault();
-  
-  if (navigator.share) {
-    navigator.share({
-      title: 'Orcus4Ai',
-      text: 'Check out Orcus4Ai - Your one-stop hub for AI courses, safety research, and a global community for knowledge sharing:',
-      url: 'https://orcus4ai.com'
-    })
-    .catch(err => console.log('Share canceled', err));
-  } else {
-    // Fallback for browsers without Web Share API
-    alert('Sharing not supported on this browser. Copy the link: https://orcus4ai.com');
-  }
-}
-</script>
-</body>
-</html>
